@@ -1,6 +1,6 @@
 const baseUrl = process.env.REACT_APP_API_URL;
 
-export const login = async (email, password) => {
+export const login = async ({ email, password }) => {
     const config = {
         method: "POST",
         body: { email, password }

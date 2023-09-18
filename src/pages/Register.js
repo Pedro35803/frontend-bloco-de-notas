@@ -28,7 +28,8 @@ const Register = () => {
     const callbackRegister = () => {
         try {
             const { name, email, password, password_confirm } = getValues();
-            const user = createUser({ name, email, password, password_confirm })
+            console.log(name, email)
+            // const user = createUser({ name, email, password, password_confirm })
         } catch (error) {
             const field = error.field || "email";
             setError(field, { type: "customn", message: error.message })
@@ -42,35 +43,39 @@ const Register = () => {
                 <Form onSubmit={handleSubmit(callbackRegister)}>
                     <Input
                         type="name"
+                        name="name"
                         max="125"
                         label="Nome"
-                        {...register('name')}
-                        error={errors.name}
+                        register={register}
+                        errors={errors}
                         data-cy="register-name"
                     />
                     <Input
                         type="email"
+                        name="email"
                         max="125"
                         label="E-mail"
-                        {...register('email')}
-                        error={errors.email}
+                        register={register}
+                        errors={errors}
                         data-cy="register-email"
                     />
                     <Input
                         type="password"
+                        name="password"
                         max="525"
                         label="Senha"
-                        {...register('password')}
-                        error={errors.password}
+                        register={register}
+                        errors={errors}
                         data-cy="register-password"
 
                     />
                     <Input
                         type="password"
+                        name="password_confirm"
                         max="525"
                         label="Confirme a Senha"
-                        {...register('password_confirm')}
-                        error={errors.password_confirm}
+                        register={register}
+                        errors={errors}
                         data-cy="register-password_confirm"
                     />
                     <div className="flex justify-content gap-4">

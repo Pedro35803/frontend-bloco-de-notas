@@ -29,40 +29,41 @@ const Login = () => {
     const callbackLogin = () => {
         try {
             const { email, password } = getValues();
-            console.log(email, password)
-            const user = login({ email, password });
+            console.log(email, password);
+            // const user = login({ email, password });
         } catch (error) {
             const field = error.field || "email";
             // setError(field, { type: "customn", message: error.message });
         }
     };
 
+    const classInput = "h-[3.125rem] w-full bg-primary px-4 rounded-lg";
+
     return (
         <main className="h-screen elem-center">
             <div className="space-y-9 max-w-[40rem] w-full">
                 <Title text="Login" />
                 <Form onSubmit={handleSubmit(callbackLogin)}>
-                    <div className="space-y-4">
-                        <h1 class="text-xl">{"props.label"}</h1>
-                        <input type="text" />
-                        {errors.email ? <p className="text-tertiary">{ errors.email.message }</p> : null}
-                    </div>
-                    {/* <Input
+                    <Input
                         type="email"
+                        name="email"
                         max="125"
                         label="E-mail"
-                        {...register("email")}
-                        error={errors.email}
                         data-cy="login-email"
-                    /> */}
+                        errors={errors}
+                        register={register}
+                    />
+
                     <Input
                         type="password"
-                        max="525"
+                        name="password"
+                        max="125"
                         label="Senha"
-                        {...register("password")}
-                        error={errors.password}
                         data-cy="login-password"
+                        errors={errors}
+                        register={register}
                     />
+
                     <div className="flex justify-content gap-4">
                         <Button
                             isOutline={true}
