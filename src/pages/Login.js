@@ -8,6 +8,7 @@ import Input from "../components/Input.js";
 import Button from "../components/Button.js";
 
 import { login } from "../services/crudUser.js";
+import { useNavigate } from "react-router-dom";
 
 const schema = yup.object({
     email: yup
@@ -22,22 +23,36 @@ const Login = () => {
         register,
         handleSubmit,
         formState: { errors },
-        // setError,
+        setError,
         getValues,
     } = useForm({ resolver: yupResolver(schema) });
 
-    const callbackLogin = () => {
+    const navigate = useNavigate();
+
+    const callbackLogin = async () => {
         try {
             const { email, password } = getValues();
-            console.log(email, password);
-            // const user = login({ email, password });
+            const response = await login({ email, password });
+            console.log(response);
+            if (response.access) {
+                navigate("/account");
+            }
         } catch (error) {
-            const field = error.field || "email";
-            // setError(field, { type: "customn", message: error.message });
+            if (error.name === "AxiosError") {
+                const { status } = error.response;
+                if (status === 401) {
+                    setError("email", {
+                        type: "customn",
+                        message: "Usuário ou senha incorreto",
+                    });
+                    setError("password", {
+                        type: "customn",
+                        message: "Usuário ou senha incorreto",
+                    });
+                }
+            }
         }
     };
-
-    const classInput = "h-[3.125rem] w-full bg-primary px-4 rounded-lg";
 
     return (
         <main className="h-screen elem-center">

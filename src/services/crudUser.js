@@ -1,31 +1,23 @@
-const baseUrl = process.env.REACT_APP_API_URL;
+import api from "../api.js";
 
 export const login = async ({ email, password }) => {
-    const config = {
-        method: "POST",
-        body: { email, password }
-    }
+    const data = { email, password };
 
-    const response = await fetch(`${baseUrl}/login`, config);
-    const content = response.json();
+    const response = await api.post(`/login`, data);
+    const content = await response.data;
 
-    if (!response.ok)
-        throw new Error(content.message);
+    if (response.status !== 201) throw new Error(content.message);
 
-    return content;
-}
+    return await content.token;
+};
 
 export const createUser = async ({ name, email, password }) => {
-    const config = {
-        method: "POST",
-        body: { name, email, password }
-    }
-    
-    const response = await fetch(`${baseUrl}/register`, config);
-    const content = response.json();
+    const data = { name, email, password };
 
-    if (!response.ok)
-        throw new Error(content.message);
+    const response = await api.post(`/register`, data);
+    const content = await response.data;
+
+    if (response.status !== 201) throw new Error(content?.message);
 
     return content;
-}
+};

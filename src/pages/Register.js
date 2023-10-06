@@ -7,13 +7,20 @@ import Title from "../components/Title.js";
 import Input from "../components/Input.js";
 import Button from "../components/Button.js";
 
-import { createUser } from "../services/crudUser.js"
+import { createUser } from "../services/crudUser.js";
+import { useNavigate } from "react-router-dom";
 
 const schema = yup.object({
     name: yup.string().required("É nescessário informar seu nome"),
-    email: yup.string().required("É nescessário informar um email").email("Digite um email valido"),
+    email: yup
+        .string()
+        .required("É nescessário informar um email")
+        .email("Digite um email valido"),
     password: yup.string().required("Informe uma senha segura"),
-    password_confirm: yup.string().oneOf([yup.ref('password'), null], "As senhas devem ser iguais").required("Confirme a senha"),
+    password_confirm: yup
+        .string()
+        .oneOf([yup.ref("password"), null], "As senhas devem ser iguais")
+        .required("Confirme a senha"),
 });
 
 const Register = () => {
@@ -25,16 +32,27 @@ const Register = () => {
         setError,
     } = useForm({ resolver: yupResolver(schema) });
 
-    const callbackRegister = () => {
+    const navigate = useNavigate();
+
+    const callbackRegister = async () => {
         try {
             const { name, email, password, password_confirm } = getValues();
-            console.log(name, email)
-            // const user = createUser({ name, email, password, password_confirm })
+            if (password === password_confirm) {
+                const user = await createUser({ name, email, password });
+                if (user.id) {
+                    navigate("/login");
+                }
+            }
         } catch (error) {
-            const field = error.field || "email";
-            setError(field, { type: "customn", message: error.message })
+            if (error.name === "AxiosError") {
+                const { data, status } = error.response
+                if (status === 409) {
+                    const field = data.field;
+                    setError(field, { type: "customn", message: data.message });
+                }
+            }
         }
-    }
+    };
 
     return (
         <main className="h-screen elem-center">
@@ -67,7 +85,6 @@ const Register = () => {
                         register={register}
                         errors={errors}
                         data-cy="register-password"
-
                     />
                     <Input
                         type="password"
@@ -82,7 +99,7 @@ const Register = () => {
                         <Button
                             isOutline={true}
                             link="/login"
-                            data-cy="login-redirect_login"
+                            data-cy="reister-redirect_login"
                         >
                             Login
                         </Button>
