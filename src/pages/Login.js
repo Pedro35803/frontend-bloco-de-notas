@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
+import cookie from "cookiejs";
 import * as yup from "yup";
 
 import Form from "../components/Form.js";
@@ -8,7 +10,7 @@ import Input from "../components/Input.js";
 import Button from "../components/Button.js";
 
 import { login } from "../services/crudUser.js";
-import { useNavigate } from "react-router-dom";
+import { timeToken } from "../services/timeToken.js";
 
 const schema = yup.object({
     email: yup
@@ -33,9 +35,27 @@ const Login = () => {
         try {
             const { email, password } = getValues();
             const response = await login({ email, password });
-            console.log(response);
+            
             if (response.access) {
-                navigate("/account");
+                const minutesAccessToken = Number(
+                    process.env.REACT_APP_ACCESS_TOKEN_DURATION_MINUTES
+                );
+                const minutesRefreshToken = Number(
+                    process.env.REACT_APP_REFRESH_TOKEN_DURATION_MINUTES
+                );
+
+                const timeTokenAccess = timeToken(minutesAccessToken);
+                const timeTokenRefresh = timeToken(minutesRefreshToken);
+
+                cookie.set('access', response.access, {
+                    expires: timeTokenAccess
+                });
+
+                cookie.set('refresh', response.refresh, {
+                    expires: timeTokenRefresh
+                });
+
+                navigate("/main");
             }
         } catch (error) {
             if (error.name === "AxiosError") {
