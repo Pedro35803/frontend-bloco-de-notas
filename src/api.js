@@ -1,35 +1,29 @@
 import axios from "axios";
-import cookie from "cookiejs";
 
 import { refreshToken } from "./services/refreshToken";
-import { timeToken } from "./services/timeToken"
+import {
+    getAccessToken,
+    getRefreshToken,
+    setAccessToken,
+} from "./services/cookiesHandle";
 
 const baseURL = process.env.REACT_APP_API_URL;
 
-const getAccessToken = async () => {
-    const access = cookie.get("access");
-    const refresh = cookie.get("refresh");
+const accessToken = async () => {
+    const access = getAccessToken();
+    const refresh = getRefreshToken();
 
     if (!access && refresh) {
         const response = await refreshToken({ refresh });
-
-        const minutesAccessToken = Number(
-            process.env.REACT_APP_ACCESS_TOKEN_DURATION_MINUTES
-        );
-
-        const timeTokenAccess = timeToken(minutesAccessToken);
-
-        cookie.set('refresh', response.refresh, {
-            expires: timeTokenAccess
-        });
-        return ;
+        setAccessToken(response)
+        return response;
     }
 
     return access;
 };
 
-const access = await getAccessToken();
-console.log(access)
+const access = await accessToken();
+console.log(access);
 
 const contentType = { "Content-Type": "application/json" };
 const headers = access

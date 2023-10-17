@@ -9,7 +9,7 @@ import Input from "../components/Input.js";
 import Button from "../components/Button.js";
 
 import { login } from "../services/crudUser.js";
-import { timeToken } from "../services/timeToken.js";
+import { setAccessToken, setRefreshToken } from "../services/cookiesHandle.js";
 
 const schema = yup.object({
     email: yup
@@ -34,24 +34,8 @@ const Login = () => {
             const response = await login({ email, password });
             
             if (response.access) {
-                const minutesAccessToken = Number(
-                    process.env.REACT_APP_ACCESS_TOKEN_DURATION_MINUTES
-                );
-                const minutesRefreshToken = Number(
-                    process.env.REACT_APP_REFRESH_TOKEN_DURATION_MINUTES
-                );
-
-                const timeTokenAccess = timeToken(minutesAccessToken);
-                const timeTokenRefresh = timeToken(minutesRefreshToken);
-
-                cookie.set('access', response.access, {
-                    expires: timeTokenAccess
-                });
-
-                cookie.set('refresh', response.refresh, {
-                    expires: timeTokenRefresh
-                });
-
+                setAccessToken(response.access)
+                setRefreshToken(response.refresh)
                 window.location.reload();
             }
         } catch (error) {
