@@ -1,7 +1,21 @@
-export const getAllNotepads = () => {
-    const title = "Titulo 01";
-    const content = "Lorem ipsum dolor sit amet consectetur. Praesent orci eget mauris ultrices. Donec quis morbi sit justo nec. Odio volutpat nullam commodo porttitor tortor congue sem turpis. Vestibulum nisl ut hendrerit auctor diam amet senectus."
-    
-    const obj = { title, content };
-    return [obj, obj];
+import api from "../api"
+
+export const getAllNotepads = async () => {
+    const response = await api.get(`/user/me/notepad`);
+    const content = await response.data;
+
+    if (response.status !== 200) throw new Error(content.message);
+
+    return await content;
+}
+
+export const createNotepad = async ({ title, content }) => {
+    const data = { title, content };
+
+    const response = await api.post(`/user/me/notepad`, data);
+    const resContent = await response.data;
+
+    if (response.status !== 201) throw new Error(content.message);
+
+    return await resContent;
 }

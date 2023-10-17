@@ -6,7 +6,7 @@ const Input = (props) => {
 
     return (
         <div className="space-y-4">
-            <h1 class="text-xl">{props.label}</h1>
+            <h1 className="text-xl">{props.label}</h1>
             <input
                 required
                 className={classInput}

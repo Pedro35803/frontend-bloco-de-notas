@@ -1,27 +1,56 @@
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
 import Button from "./Button";
 import Form from "./Form";
+import Input from "./Input";
+
+import { createNotepad } from "../services/crudNotepad";
+
+const schema = yup.object({
+    title: yup.string().required("É nescessário informar o titulo"),
+    content: yup.string(),
+});
 
 const Modal = ({ callbackClose, isVisible }) => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        getValues,
+    } = useForm({ resolver: yupResolver(schema) });
+
     const classVisible = isVisible ? "opacity-100 visible" : "invisible opacity-0";
 
-    const callbackForm = (event) => {
+    const submitValues = async () => {
+        try {
+            const { title, content } = getValues();
+            await createNotepad({ title, content })
+            callbackClose();
+        } catch (error) {
+            console.error(error)
+        }
+    };
+
+    const callbackForm = (a, event) => {
         event.preventDefault();
         const buttonPress = event.nativeEvent.submitter;
         const buttonSend = buttonPress.getAttribute("send");
         if (buttonSend === "send") {
-            console.log("oi");
+            submitValues();
         } else {
             callbackClose();
         }
     };
 
     const onClickPage = (event) => {
-        const elementClick = event.target
+        const elementClick = event.target;
         const elementName = elementClick.getAttribute("name");
         if (elementName === "modal-page") {
-            callbackClose()
+            callbackClose();
         }
-    }
+    };
 
     return (
         <div
@@ -29,28 +58,10 @@ const Modal = ({ callbackClose, isVisible }) => {
             className={`${classVisible} duration-200 ease-linear bg-page_modal fixed inset-0 h-screen flex justify-center items-center transition-modal`}
             onClick={onClickPage}
         >
-            <Form className="rounded-lg w-[40rem]" onSubmit={callbackForm}>
-                <div class="space-y-4">
-                    <h1 class="text-xl">Titulo</h1>
-                    <input
-                        type="text"
-                        id="editTitle"
-                        max="125"
-                        required
-                        class="h-[3.125rem] w-full bg-primary px-4 rounded-lg"
-                    />
-                </div>
-                <div class="space-y-4">
-                    <h1 class="text-xl">Texto</h1>
-                    <input
-                        type="text"
-                        id="editContent"
-                        max="525"
-                        required
-                        class="h-[3.125rem] w-full bg-primary px-4 rounded-lg"
-                    />
-                </div>
-                <div class="flex gap-4">
+            <Form className="rounded-lg w-[40rem]" onSubmit={handleSubmit(callbackForm)}>
+                <Input register={register} name="title" label="Titulo" errors={errors} />
+                <Input register={register} name="content" label="Texto" errors={errors} />
+                <div className="flex gap-4">
                     <Button isOutline={true}>Cancelar</Button>
                     <Button hasSend>Enviar</Button>
                 </div>
