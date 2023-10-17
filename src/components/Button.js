@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Button = (props) => {
     const classCommom =
         "h-14 w-1/2 rounded-lg text-xl elem-center cursor-pointer ";
@@ -12,11 +14,11 @@ const Button = (props) => {
         : classCommom + classButton;
 
     return props.link ? (
-        <a className={classResult} href={props.link} {...props}>
+        <Link className={classResult} to={props.link} {...props}>
             {props.children}
-        </a>
+        </Link>
     ) : (
-        <button className={classResult} {...props}>
+        <button className={classResult} send={props.hasSend ? "send" : "no_send"} {...props}>
             {props.children}
         </button>
     );

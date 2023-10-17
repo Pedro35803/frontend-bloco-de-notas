@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import cookie from "cookiejs";
 import * as yup from "yup";
@@ -29,8 +28,6 @@ const Login = () => {
         getValues,
     } = useForm({ resolver: yupResolver(schema) });
 
-    const navigate = useNavigate();
-
     const callbackLogin = async () => {
         try {
             const { email, password } = getValues();
@@ -55,7 +52,7 @@ const Login = () => {
                     expires: timeTokenRefresh
                 });
 
-                navigate("/main");
+                window.location.reload();
             }
         } catch (error) {
             if (error.name === "AxiosError") {
