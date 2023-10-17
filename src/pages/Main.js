@@ -15,8 +15,11 @@ const Main = () => {
 
     const modalClose = () => setModalVisible(false);
 
+    const addNewNotepad = (newNotepad) => {
+        setListNotepads([...listNotepads, newNotepad]);
+    }
+
     useEffect(() => {
-        console.log("oi")
         const main = async () => {
             const list = await getAllNotepads();
             setListNotepads(list);
@@ -60,16 +63,15 @@ const Main = () => {
                 </section>
 
                 <section className="container flex flex-col justify-between items-center gap-8">
-                    {listNotepads.map((notepadObj) => (
-                        <Notepad data={notepadObj} />
+                    {listNotepads.map((notepadObj, index) => (
+                        <Notepad data={notepadObj} key={index} />
                     ))}
                 </section>
             </main>
             <Modal
                 isVisible={modalVisible}
                 callbackClose={modalClose}
-                title="Registrar nova anotação"
-                text="oi"
+                addNotepad={addNewNotepad}
             />
         </>
     );

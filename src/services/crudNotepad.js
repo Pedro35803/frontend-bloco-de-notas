@@ -15,7 +15,9 @@ export const createNotepad = async ({ title, content }) => {
     const response = await api.post(`/user/me/notepad`, data);
     const resContent = await response.data;
 
-    if (response.status !== 201) throw new Error(content.message);
+    console.log(response)
+
+    if (response.statusText !== "OK") throw new Error(content.message);
 
     return await resContent;
 }

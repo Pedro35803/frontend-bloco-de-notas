@@ -13,7 +13,7 @@ const schema = yup.object({
     content: yup.string(),
 });
 
-const Modal = ({ callbackClose, isVisible }) => {
+const Modal = ({ callbackClose, isVisible, addNotepad }) => {
     const {
         register,
         handleSubmit,
@@ -21,15 +21,18 @@ const Modal = ({ callbackClose, isVisible }) => {
         getValues,
     } = useForm({ resolver: yupResolver(schema) });
 
-    const classVisible = isVisible ? "opacity-100 visible" : "invisible opacity-0";
+    const classVisible = isVisible
+        ? "opacity-100 visible"
+        : "invisible opacity-0";
 
     const submitValues = async () => {
         try {
             const { title, content } = getValues();
-            await createNotepad({ title, content })
+            const notepad = await createNotepad({ title, content });
+            addNotepad(notepad);
             callbackClose();
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
     };
 
@@ -58,9 +61,22 @@ const Modal = ({ callbackClose, isVisible }) => {
             className={`${classVisible} duration-200 ease-linear bg-page_modal fixed inset-0 h-screen flex justify-center items-center transition-modal`}
             onClick={onClickPage}
         >
-            <Form className="rounded-lg w-[40rem]" onSubmit={handleSubmit(callbackForm)}>
-                <Input register={register} name="title" label="Titulo" errors={errors} />
-                <Input register={register} name="content" label="Texto" errors={errors} />
+            <Form
+                className="rounded-lg w-[40rem]"
+                onSubmit={handleSubmit(callbackForm)}
+            >
+                <Input
+                    register={register}
+                    name="title"
+                    label="Titulo"
+                    errors={errors}
+                />
+                <Input
+                    register={register}
+                    name="content"
+                    label="Texto"
+                    errors={errors}
+                />
                 <div className="flex gap-4">
                     <Button isOutline={true}>Cancelar</Button>
                     <Button hasSend>Enviar</Button>

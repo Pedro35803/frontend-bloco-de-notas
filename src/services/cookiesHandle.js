@@ -31,6 +31,14 @@ export const setAccessToken = (newToken) => {
     });
 }
 
-export const setRefreshToken = () => {
-    return cookie.get("refresh");
+export const setRefreshToken = (newToken) => {
+    const minutesRefreshToken = Number(
+        process.env.REACT_APP_REFRESH_TOKEN_DURATION_MINUTES
+    );
+
+    const timeTokenRefresh = timeToken(minutesRefreshToken);
+
+    cookie.set("refresh", newToken, {
+        expires: timeTokenRefresh,
+    });
 }

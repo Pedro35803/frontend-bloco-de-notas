@@ -23,7 +23,6 @@ const accessToken = async () => {
 };
 
 const access = await accessToken();
-console.log(access);
 
 const contentType = { "Content-Type": "application/json" };
 const headers = access
