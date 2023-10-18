@@ -71,7 +71,7 @@ const Main = () => {
             <Modal
                 isVisible={modalVisible}
                 callbackClose={modalClose}
-                addNotepad={addNewNotepad}
+                callbackSuccess={addNewNotepad}
             />
         </>
     );

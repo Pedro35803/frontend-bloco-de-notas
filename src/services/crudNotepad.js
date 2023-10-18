@@ -17,7 +17,18 @@ export const createNotepad = async ({ title, content }) => {
 
     console.log(response)
 
-    if (response.statusText !== "OK") throw new Error(content.message);
+    if (response.statusText !== "OK") throw new Error(resContent.message);
 
     return await resContent;
+}
+
+export const deleteNotepad = async ({ id }) => {
+    const response = await api.delete(`/user/me/notepad/${id}`);
+    const content = await response.data;
+
+    console.log(response)
+
+    if (response.status !== 403) throw new Error(content.message);
+
+    return await content;
 }

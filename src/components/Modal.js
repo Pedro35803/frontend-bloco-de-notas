@@ -13,12 +13,13 @@ const schema = yup.object({
     content: yup.string(),
 });
 
-const Modal = ({ callbackClose, isVisible, addNotepad }) => {
+const Modal = ({ callbackClose, isVisible, callbackSuccess, callback titleValue, textValue }) => {
     const {
         register,
         handleSubmit,
         formState: { errors },
         getValues,
+        setValue,
     } = useForm({ resolver: yupResolver(schema) });
 
     const classVisible = isVisible
@@ -29,8 +30,10 @@ const Modal = ({ callbackClose, isVisible, addNotepad }) => {
         try {
             const { title, content } = getValues();
             const notepad = await createNotepad({ title, content });
-            addNotepad(notepad);
+            callbackSuccess(notepad);
             callbackClose();
+            setValue("title", "");
+            setValue("content", "");
         } catch (error) {
             console.error(error);
         }
@@ -70,12 +73,14 @@ const Modal = ({ callbackClose, isVisible, addNotepad }) => {
                     name="title"
                     label="Titulo"
                     errors={errors}
+                    value={titleValue ? titleValue : ""}
                 />
                 <Input
                     register={register}
                     name="content"
                     label="Texto"
                     errors={errors}
+                    value={textValue ? textValue : ""}
                 />
                 <div className="flex gap-4">
                     <Button isOutline={true}>Cancelar</Button>
