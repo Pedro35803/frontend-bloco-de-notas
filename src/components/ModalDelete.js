@@ -1,16 +1,19 @@
 import Button from "./Button";
 import Form from "./Form";
 
-import { deleteNotepad } from "../services/crudNotepad";
-
-const ModalDelete = ({ callbackClose, isVisible, callbackSuccess, idNotepad }) => {
+const ModalDelete = ({
+    callbackClose,
+    isVisible,
+    callbackSuccess,
+    callbackAction,
+}) => {
     const classVisible = isVisible
         ? "opacity-100 visible"
         : "invisible opacity-0";
 
     const onClickDelete = async () => {
         try {
-            await deleteNotepad({ id: idNotepad });
+            await callbackAction();
             callbackSuccess();
             callbackClose();
         } catch (error) {
@@ -43,11 +46,8 @@ const ModalDelete = ({ callbackClose, isVisible, callbackSuccess, idNotepad }) =
             className={`${classVisible} duration-200 ease-linear bg-page_modal fixed inset-0 h-screen flex justify-center items-center transition-modal`}
             onClick={onClickPage}
         >
-            <Form
-                className="rounded-lg w-[40rem]"
-                onSubmit={callbackForm}
-            >
-                <p>Deseja mesmo excluir essa </p>
+            <Form className="rounded-lg w-[40rem]" onSubmit={callbackForm}>
+                <h1 className="text-xl">Deseja mesmo excluir essa anotação?</h1>
                 <div className="flex gap-4">
                     <Button isOutline={true}>Cancelar</Button>
                     <Button hasSend>Excluir</Button>

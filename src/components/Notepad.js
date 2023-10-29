@@ -1,13 +1,12 @@
 import trashIcon from "../img/trash.svg";
 import editIcon from "../img/edit.svg";
-import { useState } from "react";
 
-import Modal from "./Modal";
-import ModalDelete from "./ModalDelete";
-
-const Notepad = ({ data, callbackEdit, callbackDelete }) => {
-    const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
-    const [modalEditVisible, setModalEditVisible] = useState(false);
+const Notepad = ({
+    data,
+    updateId,
+    callbackModalEdit,
+    callbackModalDelete,
+}) => {
     return (
         <>
             <div className="bg-primary p-9 w-full rounded-lg shadow-common border border-solid border-[#e7e7e7]">
@@ -18,28 +17,24 @@ const Notepad = ({ data, callbackEdit, callbackDelete }) => {
                             src={trashIcon}
                             alt="Deletar"
                             className="h-6 cursor-pointer"
+                            onClick={() => {
+                                updateId(data.id);
+                                callbackModalDelete(true);
+                            }}
                         />
                         <img
                             src={editIcon}
                             alt="Editar"
                             className="h-6 cursor-pointer"
+                            onClick={() => {
+                                updateId(data.id);
+                                callbackModalEdit(true);
+                            }}
                         />
                     </div>
                 </div>
                 <p className="text-base mt-6 content">{data.content}</p>
             </div>
-            <Modal
-                isVisible={modalEditVisible}
-                callbackSuccess={callbackEdit}
-                callbackClose={() => setModalEditVisible(false)}
-                titleValue={data.title}
-                textValue={data.content}
-            />
-            <ModalDelete
-                isVisible={modalDeleteVisible}
-                callbackSuccess={callbackDelete}
-                callbackClose={() => setModalDeleteVisible(false)}
-            />
         </>
     );
 };

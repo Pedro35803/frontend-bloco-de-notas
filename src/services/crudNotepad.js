@@ -22,6 +22,19 @@ export const createNotepad = async ({ title, content }) => {
     return await resContent;
 }
 
+export const editNotepad = async ({ id, title, content }) => {
+    const data = { title, content };
+
+    const response = await api.patch(`/user/me/notepad/${id}`, data);
+    const resContent = await response.data;
+
+    console.log(response)
+
+    if (response.statusText !== "OK") throw new Error(resContent.message);
+
+    return await resContent;
+}
+
 export const deleteNotepad = async ({ id }) => {
     const response = await api.delete(`/user/me/notepad/${id}`);
     const content = await response.data;
