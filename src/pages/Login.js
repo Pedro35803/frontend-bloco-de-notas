@@ -1,15 +1,15 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import cookie from "cookiejs";
 import * as yup from "yup";
 
-import Form from "../components/Form.js";
-import Title from "../components/Title.js";
 import Input from "../components/Input.js";
 import Button from "../components/Button.js";
 
 import { login } from "../services/crudUser.js";
 import { setAccessToken, setRefreshToken } from "../services/cookiesHandle.js";
+
+import ModalErrorServer from "../components/Modal/ModalCustomn/ModalErrorServer.js";
+import { useModal } from "../components/Modal/useModal.js";
 
 const schema = yup.object({
     email: yup
@@ -25,21 +25,23 @@ const Login = () => {
         handleSubmit,
         formState: { errors },
         setError,
-        getValues,
     } = useForm({ resolver: yupResolver(schema) });
 
-    const callbackLogin = async () => {
+    const { Modal, openModal } = useModal({ modal: ModalErrorServer });
+
+    const callbackLogin = async (fields) => {
         try {
-            const { email, password } = getValues();
-            const response = await login({ email, password });
-            
+            const response = await login(fields);
+
             if (response.access) {
-                setAccessToken(response.access)
-                setRefreshToken(response.refresh)
+                setAccessToken(response.access);
+                setRefreshToken(response.refresh);
                 window.location.reload();
             }
         } catch (error) {
-            if (error.name === "AxiosError") {
+            if (error.message === "Network Error") {
+                openModal();
+            } else if (error.name === "AxiosError") {
                 const { status } = error.response;
                 if (status === 401) {
                     setError("email", {
@@ -56,43 +58,47 @@ const Login = () => {
     };
 
     return (
-        <main className="h-screen elem-center">
-            <div className="space-y-9 max-w-[40rem] w-full">
-                <Title text="Login" />
-                <Form onSubmit={handleSubmit(callbackLogin)}>
-                    <Input
-                        type="email"
-                        name="email"
-                        max="125"
-                        label="E-mail"
-                        data-cy="login-email"
-                        errors={errors}
-                        register={register}
-                    />
+        <>
+            <main className="h-screen elem-center">
+                <div className="space-y-9 max-w-[40rem] w-full">
+                    <h1 className="title">Login</h1>
+                    <form
+                        className="form"
+                        onSubmit={handleSubmit(callbackLogin)}
+                    >
+                        <Input
+                            max="125"
+                            type="email"
+                            label="E-mail"
+                            data-cy="login-email"
+                            errors={errors.email}
+                            {...register("email")}
+                        />
 
-                    <Input
-                        type="password"
-                        name="password"
-                        max="125"
-                        label="Senha"
-                        data-cy="login-password"
-                        errors={errors}
-                        register={register}
-                    />
+                        <Input
+                            max="125"
+                            label="Senha"
+                            type="password"
+                            data-cy="login-password"
+                            errors={errors.password}
+                            {...register("password")}
+                        />
 
-                    <div className="flex justify-content gap-4">
-                        <Button
-                            isOutline={true}
-                            link="/register"
-                            data-cy="login-redirect_register"
-                        >
-                            Cadastro
-                        </Button>
-                        <Button data-cy="login-save">Entrar</Button>
-                    </div>
-                </Form>
-            </div>
-        </main>
+                        <div className="flex justify-content gap-4">
+                            <Button
+                                isOutline={true}
+                                link="/register"
+                                data-cy="login-redirect_register"
+                            >
+                                Cadastro
+                            </Button>
+                            <Button data-cy="login-save">Entrar</Button>
+                        </div>
+                    </form>
+                </div>
+                <Modal />
+            </main>
+        </>
     );
 };
 

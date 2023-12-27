@@ -4,23 +4,28 @@ import circleIcon from "../img/plus-circle.svg";
 import searchIcon from "../img/search.svg";
 
 import Notepad from "../components/Notepad.js";
-import Modal from "../components/Modal";
 import { createNotepad, getAllNotepads } from "../services/crudNotepad.js";
-import ModalDelete from "../components/ModalDelete";
+
+import { useModal } from "../components/Modal/useModal.js";
+import ModalFormComponent from "../components/Modal/ModalCustomn/ModalForm.js";
+import ModalDeleteComponent from "../components/Modal/ModalCustomn/ModalDelete.js";
 
 const Main = () => {
-    const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
-    const [modalEditVisible, setModalEditVisible] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
     const [listNotepads, setListNotepads] = useState([]);
     const [notepadId, setNotepadId] = useState(null);
 
-    // console.log(notepadData);
+    const {
+        Modal: ModalDelete,
+        openModal: openModalDelete,
+        closeModal: closeModalDelete,
+    } = useModal({ modal: ModalDeleteComponent });
+
+    const { Modal: ModalForm, openModal: openModalForm } = useModal({
+        modal: ModalFormComponent,
+    });
 
     const classButtonLabel =
         "flex bg-primary min-w-[3.5rem] min-h-[3.5rem] rounded-lg p-[1.125rem] border border-solid border-[#e7e7e7] shadow-common ";
-
-    const modalClose = () => setModalVisible(false);
 
     const addNewNotepad = (newNotepad) => {
         setListNotepads([...listNotepads, newNotepad]);
@@ -42,8 +47,8 @@ const Main = () => {
     };
 
     const getNotepad = (id) => {
-        const notepad = listNotepads.find((obj) => obj.id === id)
-        return notepad
+        const notepad = listNotepads.find((obj) => obj.id === id);
+        return notepad;
     };
 
     const notepadData = useEffect(() => {
@@ -82,7 +87,8 @@ const Main = () => {
                             classButtonLabel +
                             "flex items-center gap-4 text-secondary p-[1.125rem] w-full sm:w-[25rem]"
                         }
-                        onClick={() => setModalVisible(true)}
+                        onClick={openModalForm}
+                        data-cy="add-notepad"
                     >
                         <img src={circleIcon} className="w-7 md:w-auto" />
                         <p>Adicionar</p>
@@ -94,34 +100,26 @@ const Main = () => {
                         <Notepad
                             key={index}
                             data={notepadObj}
-                            callbackModalEdit={() => setModalEditVisible(true)}
-                            callbackModalDelete={() =>
-                                setModalDeleteVisible(true)
-                            }
+                            callbackModalEdit={openModalDelete}
+                            callbackModalDelete={closeModalDelete}
                             updateId={setNotepadId}
                         />
                     ))}
                 </section>
             </main>
-            <Modal
-                isVisible={modalVisible}
-                callbackClose={modalClose}
+            <ModalForm
                 callbackSuccess={addNewNotepad}
                 callbackGetNotepad={getNotepad}
                 callbackAction={createNotepad}
             />
-            <Modal
-                isVisible={modalEditVisible}
+            <ModalForm
                 callbackSuccess={editNotepad}
-                callbackClose={() => setModalEditVisible(false)}
                 callbackGetNotepad={getNotepad}
                 callbackAction={editNotepad}
                 notepadId={notepadId}
             />
             <ModalDelete
-                isVisible={modalDeleteVisible}
                 callbackSuccess={() => deleteNotepad(notepadData?.id)}
-                callbackClose={() => setModalDeleteVisible(false)}
                 callbackGetNotepad={getNotepad}
                 callbackAction={deleteNotepad}
             />

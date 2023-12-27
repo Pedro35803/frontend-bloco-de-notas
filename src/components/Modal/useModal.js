@@ -1,6 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
-export const useModal = () => {
+export const useModal = ({ modal: ModalComponent }) => {
     const [isVisible, setIsVisible] = useState(false);
 
     const openModal = () => {
@@ -11,52 +11,15 @@ export const useModal = () => {
         setIsVisible(false);
     };
 
-    const ModalForm = (props) => {
+    const Modal = () => {
         return (
-            <ModalForm
-                isVisible={isVisible}
-                callbackClose={closeModal}
-                {...props}
-            />
-        );
-    };
-    
-    const ModalErrorServer = (props) => {
-        return (
-            <ModalErrorServer
-                isVisible={isVisible}
-                callbackClose={closeModal}
-                {...props}
-            />
-        );
-    };
-
-    const ModalDelete = (props) => {
-        return (
-            <ModalDelete
-                isVisible={isVisible}
-                callbackClose={closeModal}
-                {...props}
-            />
-        );
-    };
-
-    const Modal = (props) => {
-        return (
-            <Modal
-                isVisible={isVisible}
-                callbackClose={closeModal}
-                {...props}
-            />
+            <ModalComponent isVisible={isVisible} callbackClose={closeModal} />
         );
     };
 
     return {
-        ModalErrorServer,
-        ModalDelete,
         closeModal,
-        ModalForm,
         openModal,
-        Modal
+        Modal,
     };
 };

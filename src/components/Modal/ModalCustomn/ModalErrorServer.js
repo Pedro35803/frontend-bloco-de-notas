@@ -5,8 +5,8 @@ const ModalErrorServer = ({ callbackClose, isVisible }) => {
     return (
         <Modal isVisible={isVisible} callbackClose={callbackClose}>
             <div className="form rounded-lg w-[40rem]">
-                <h1 className="text-xl">Error de conecção</h1>
-                <p className="text-base">
+                <h1 className="text-2xl font-bold">Error de conecção</h1>
+                <p className="text-lg">
                     Não é possível estabelecer uma conecção com o servidor,
                     verifique se o backend está ligado corretamente.
                 </p>
