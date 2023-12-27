@@ -4,7 +4,6 @@ import { useState } from "react";
 import * as yup from "yup";
 
 import Button from "../../Button";
-import Form from "../../Form";
 import Input from "../../Input";
 import Modal from "../Modal";
 
@@ -51,9 +50,14 @@ const ModalForm = ({
     };
 
     return (
-        <Modal isVisible={isVisible} callbackClose={callbackClose} resetValues={reset}>
-            <Form
-                className="rounded-lg w-[40rem]"
+        <Modal
+            isVisible={isVisible}
+            callbackClose={callbackClose}
+            resetValues={reset}
+        >
+            <form
+                noValidate
+                className="form rounded-lg w-[40rem]"
                 onSubmit={handleSubmit(submitValues)}
             >
                 <Input
@@ -81,7 +85,7 @@ const ModalForm = ({
                     </Button>
                     <Button data-cy="modal-action">Enviar</Button>
                 </div>
-            </Form>
+            </form>
         </Modal>
     );
 };

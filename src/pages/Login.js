@@ -8,7 +8,7 @@ import Button from "../components/Button.js";
 import { login } from "../services/crudUser.js";
 import { setAccessToken, setRefreshToken } from "../services/cookiesHandle.js";
 
-import ModalErrorServer from "../components/Modal/ModalCustomn/ModalErrorServer.js";
+import ModalServerError from "../components/Modal/ModalCustomn/ModalServerError.js";
 import { useModal } from "../components/Modal/useModal.js";
 
 const schema = yup.object({
@@ -27,7 +27,7 @@ const Login = () => {
         setError,
     } = useForm({ resolver: yupResolver(schema) });
 
-    const { Modal, openModal } = useModal({ modal: ModalErrorServer });
+    const { Modal, openModal } = useModal({ modal: ModalServerError });
 
     const callbackLogin = async (fields) => {
         try {
@@ -44,14 +44,12 @@ const Login = () => {
             } else if (error.name === "AxiosError") {
                 const { status } = error.response;
                 if (status === 401) {
-                    setError("email", {
+                    const config = {
                         type: "customn",
                         message: "Usuário ou senha incorreto",
-                    });
-                    setError("password", {
-                        type: "customn",
-                        message: "Usuário ou senha incorreto",
-                    });
+                    };
+                    setError("email", config);
+                    setError("password", config);
                 }
             }
         }
@@ -63,6 +61,7 @@ const Login = () => {
                 <div className="space-y-9 max-w-[40rem] w-full">
                     <h1 className="title">Login</h1>
                     <form
+                        noValidate
                         className="form"
                         onSubmit={handleSubmit(callbackLogin)}
                     >
@@ -71,7 +70,7 @@ const Login = () => {
                             type="email"
                             label="E-mail"
                             data-cy="login-email"
-                            errors={errors.email}
+                            error={errors.email}
                             {...register("email")}
                         />
 
@@ -80,7 +79,7 @@ const Login = () => {
                             label="Senha"
                             type="password"
                             data-cy="login-password"
-                            errors={errors.password}
+                            error={errors.password}
                             {...register("password")}
                         />
 
@@ -96,8 +95,8 @@ const Login = () => {
                         </div>
                     </form>
                 </div>
-                <Modal />
             </main>
+            <Modal />
         </>
     );
 };

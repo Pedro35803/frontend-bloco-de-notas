@@ -1,5 +1,4 @@
 import Button from "../../Button";
-import Form from "../../Form";
 import Modal from "../Modal";
 
 const ModalDelete = ({
@@ -31,13 +30,13 @@ const ModalDelete = ({
 
     return (
         <Modal isVisible={isVisible} callbackClose={callbackClose}>
-            <Form className="rounded-lg w-[40rem]" onSubmit={callbackForm}>
+            <form noValidate className="form rounded-lg w-[40rem]" onSubmit={callbackForm}>
                 <h1 className="text-xl">Deseja mesmo excluir essa anotação?</h1>
                 <div className="flex gap-4">
                     <Button isOutline={true}>Cancelar</Button>
                     <Button hasSend>Excluir</Button>
                 </div>
-            </Form>
+            </form>
         </Modal>
     );
 };

@@ -11,12 +11,13 @@ const Notepad = ({
         <>
             <div className="bg-primary p-9 w-full rounded-lg shadow-common border border-solid border-[#e7e7e7]">
                 <div className="flex justify-between align-center">
-                    <h1 className="content-xl title">{data.title}</h1>
+                    <h1 className="content-xl title" data-cy="notepad-title">{data.title}</h1>
                     <div className="flex gap-4">
                         <img
                             src={trashIcon}
                             alt="Deletar"
                             className="h-6 cursor-pointer"
+                            data-cy="notepad-edit"
                             onClick={() => {
                                 updateId(data.id);
                                 callbackModalDelete(true);
@@ -26,6 +27,7 @@ const Notepad = ({
                             src={editIcon}
                             alt="Editar"
                             className="h-6 cursor-pointer"
+                            data-cy="notepad-delete"
                             onClick={() => {
                                 updateId(data.id);
                                 callbackModalEdit(true);
@@ -33,7 +35,7 @@ const Notepad = ({
                         />
                     </div>
                 </div>
-                <p className="text-base mt-6 content">{data.content}</p>
+                <p className="text-base mt-6 content" data-cy="notepad-content">{data.content}</p>
             </div>
         </>
     );

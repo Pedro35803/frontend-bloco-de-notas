@@ -1,21 +1,15 @@
-const Input = (props) => {
-    const classInput = "h-[3.125rem] w-full bg-primary px-4 rounded-lg";
-    const name = props.name;
-    const error = props.errors[name];
-    const register = props.register;
+import { forwardRef } from "react";
 
-    return (
-        <div className="space-y-4">
-            <h1 className="text-xl">{props.label}</h1>
-            <input
-                required
-                className={classInput}
-                {...register(name)}
-                {...props}
-            />
-            {error ? <p className="text-tertiary">{error.message}</p> : null}
-        </div>
-    );
-};
+const Input = forwardRef(({ label, error, ...rest }, ref) => {
+  const classInput = "h-[3.125rem] w-full bg-primary px-4 rounded-lg";
+
+  return (
+    <label className="flex flex-col gap-4">
+      <h1 className="text-xl">{label}</h1>
+      <input className={classInput} required ref={ref} {...rest} />
+      {error ? <p className="text-tertiary">{error.message}</p> : null}
+    </label>
+  );
+});
 
 export default Input;
