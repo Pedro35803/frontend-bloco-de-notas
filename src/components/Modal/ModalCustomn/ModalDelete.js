@@ -1,0 +1,45 @@
+import Button from "../../Button";
+import Form from "../../Form";
+import Modal from "../Modal";
+
+const ModalDelete = ({
+    callbackClose,
+    isVisible,
+    callbackSuccess,
+    callbackAction,
+}) => {
+    const onClickDelete = async () => {
+        try {
+            await callbackAction();
+            callbackSuccess();
+            callbackClose();
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const callbackForm = (a, event) => {
+        event.preventDefault();
+        const buttonPress = event.nativeEvent.submitter;
+        const buttonSend = buttonPress.getAttribute("send");
+        if (buttonSend === "send") {
+            onClickDelete();
+        } else {
+            callbackClose();
+        }
+    };
+
+    return (
+        <Modal isVisible={isVisible} callbackClose={callbackClose}>
+            <Form className="rounded-lg w-[40rem]" onSubmit={callbackForm}>
+                <h1 className="text-xl">Deseja mesmo excluir essa anotação?</h1>
+                <div className="flex gap-4">
+                    <Button isOutline={true}>Cancelar</Button>
+                    <Button hasSend>Excluir</Button>
+                </div>
+            </Form>
+        </Modal>
+    );
+};
+
+export default ModalDelete;
