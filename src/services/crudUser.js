@@ -1,23 +1,26 @@
-import api from "../api.js";
+import { createAxiosInstance } from "../api.js";
 
 export const login = async ({ email, password }) => {
-    const data = { email, password };
+  const api = await createAxiosInstance();
+  const data = { email, password };
 
-    const response = await api.post(`/login`, data);
-    const content = await response.data;
+  const response = await api.post(`/login`, data);
 
-    if (response.status !== 201) throw new Error(content.message);
+  const content = await response.data;
 
-    return await content.token;
+  if (response.status !== 201) throw new Error(content.message);
+
+  return await content.token;
 };
 
 export const createUser = async ({ name, email, password }) => {
-    const data = { name, email, password };
+  const api = await createAxiosInstance();
+  const data = { name, email, password };
 
-    const response = await api.post(`/register`, data);
-    const content = await response.data;
+  const response = await api.post(`/register`, data);
+  const content = await response.data;
 
-    if (response.status !== 201) throw new Error(content?.message);
+  if (response.status !== 201) throw new Error(content?.message);
 
-    return content;
+  return content;
 };

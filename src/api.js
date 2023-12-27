@@ -15,20 +15,21 @@ const accessToken = async () => {
 
     if (!access && refresh) {
         const response = await refreshToken({ refresh });
-        setAccessToken(response)
+        setAccessToken(response);
         return response;
     }
 
     return access;
 };
 
-const access = await accessToken();
+export const createAxiosInstance = async (token) => {
+    const access = token ? token : await accessToken();
 
-const contentType = { "Content-Type": "application/json" };
-const headers = access
-    ? { Authorization: `Bearer ${access}`, ...contentType }
-    : contentType;
+    const contentType = { "Content-Type": "application/json" };
+    const headers = access
+        ? { Authorization: `Bearer ${access}`, ...contentType }
+        : contentType;
 
-const api = axios.create({ baseURL, headers });
-
-export default api;
+    const api = axios.create({ baseURL, headers });
+    return api;
+};

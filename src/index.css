@@ -34,6 +34,20 @@ body {
   font-family: Inter, sans-serif;
 }
 
+@layer components {
+  .form {
+    @apply bg-white px-9 py-10 space-y-9 shadow-common;
+  }
+
+  .elem-center {
+    @apply flex justify-center items-center;
+  }
+
+  .title {
+    @apply flex justify-center text-5xl font-bold;
+  }
+}
+
 .container {
   max-width: 100rem;
   width: 90%;
@@ -42,12 +56,6 @@ body {
 
 .shadow-common {
   box-shadow: 8px 8px 32px rgba(114, 114, 114, 0.1);
-}
-
-.elem-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 @media (max-width: 1440px) {

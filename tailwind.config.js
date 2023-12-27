@@ -12,7 +12,7 @@ module.exports = {
         gray: "#8D99AE",
       },
       transitionProperty: {
-        'modal': 'opacity, visibility',
+        'modal': 'opacity',
       }
     },
   },
