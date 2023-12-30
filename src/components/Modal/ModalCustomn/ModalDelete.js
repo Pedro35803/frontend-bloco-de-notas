@@ -4,12 +4,13 @@ import Modal from "../Modal";
 const ModalDelete = ({
     callbackClose,
     isVisible,
+    notepadId,
     callbackSuccess,
     callbackAction,
 }) => {
     const onClickDelete = async () => {
         try {
-            await callbackAction();
+            await callbackAction(notepadId);
             callbackSuccess();
             callbackClose();
         } catch (error) {

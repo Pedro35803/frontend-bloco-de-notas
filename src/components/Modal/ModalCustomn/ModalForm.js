@@ -17,33 +17,31 @@ const ModalForm = ({
     isVisible,
     callbackSuccess,
     callbackAction,
-    callbackGetNotepad,
-    notepadId,
+    notepad,
 }) => {
     const {
         register,
         handleSubmit,
         formState: { errors },
-        getValues,
         setValue,
-        reset,
+        reset: resetFields,
     } = useForm({ resolver: yupResolver(schema) });
 
     useState(() => {
-        if (notepadId) {
-            const { title, content } = callbackGetNotepad(notepadId);
+        if (notepad) {
+            const { id, title, content } = notepad;
             setValue("content", content);
             setValue("title", title);
+            setValue("id", id)
         }
     }, []);
 
-    const submitValues = async () => {
+    const submitValues = async (fields) => {
         try {
-            const { title, content } = getValues();
-            const notepad = await callbackAction({ title, content });
-            callbackSuccess(await notepad);
+            const newNotepad = await callbackAction(fields);
+            callbackSuccess(newNotepad);
             callbackClose();
-            reset();
+            resetFields();
         } catch (error) {
             console.error(error);
         }
@@ -53,22 +51,23 @@ const ModalForm = ({
         <Modal
             isVisible={isVisible}
             callbackClose={callbackClose}
-            resetValues={reset}
+            resetValues={resetFields}
         >
             <form
                 noValidate
                 className="form rounded-lg w-[40rem]"
                 onSubmit={handleSubmit(submitValues)}
+                data-cy="modal-form"
             >
                 <Input
                     label="Titulo"
-                    errors={errors}
-                    register={register}
+                    error={errors.title}
+                    {...register("title")}
                     data-cy="modal-title"
                 />
                 <Input
                     label="Texto"
-                    register={register}
+                    {...register("content")}
                     data-cy="modal-content"
                 />
                 <div className="flex gap-4">
@@ -78,7 +77,7 @@ const ModalForm = ({
                         onClick={(event) => {
                             event.preventDefault();
                             callbackClose();
-                            reset();
+                            resetFields();
                         }}
                     >
                         Cancelar

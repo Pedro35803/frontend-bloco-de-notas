@@ -1,29 +1,58 @@
-import { Navigate, createBrowserRouter } from "react-router-dom";
-import cookie from "cookiejs";
+import {
+    createBrowserRouter,
+    Navigate,
+    RouterProvider,
+} from "react-router-dom";
 
 import Main from "./pages/Main.js";
 import Login from "./pages/Login.js";
 import Register from "./pages/Register.js";
 
-const isLogin = () => cookie.get("refresh");
+import { refreshToken } from "./services/refreshToken.js";
+import {
+    getAccessToken,
+    getRefreshToken,
+    setAccessToken,
+} from "./services/cookiesHandle.js";
+import React, { useEffect } from "react";
+import { api, updateToken } from "./api.js";
 
-const router = createBrowserRouter([
+const publicRoutes = createBrowserRouter([
     {
         path: "/",
-        element: isLogin() ? <Main /> : <Navigate to="/login" />,
-    },
-    {
-        path: "/main",
-        element: isLogin() ? <Main /> : <Navigate to="/login" />,
+        element: <Navigate to="/login" />,
     },
     {
         path: "/login",
-        element: isLogin() ? <Navigate to="/" /> : <Login />,
+        element: <Login />,
     },
     {
         path: "/register",
-        element: isLogin() ? <Navigate to="/" /> : <Register />,
+        element: <Register />,
     },
 ]);
 
-export default router;
+const privateRoutes = createBrowserRouter([
+    {
+        path: "/",
+        element: <Main />,
+    },
+]);
+
+const Router = () => {
+    const refresh = getRefreshToken();
+
+    useEffect(() => {
+        const refreshAccess = async () => {
+            const token = await refreshToken();
+            setAccessToken(token);
+        };
+
+        const access = getAccessToken();
+        access ? updateToken(access) : refreshAccess(access);
+    }, []);
+
+    return <RouterProvider router={refresh ? privateRoutes : publicRoutes} />;
+};
+
+export default Router;
