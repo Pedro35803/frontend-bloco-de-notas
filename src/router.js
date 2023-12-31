@@ -15,7 +15,7 @@ import {
     setAccessToken,
 } from "./services/cookiesHandle.js";
 import React, { useEffect } from "react";
-import { api, updateToken } from "./api.js";
+import { updateToken } from "./api.js";
 
 const publicRoutes = createBrowserRouter([
     {

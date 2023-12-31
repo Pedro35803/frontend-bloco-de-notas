@@ -11,9 +11,9 @@ export const useModal = ({ modal: ModalComponent }) => {
         setIsVisible(false);
     };
 
-    const Modal = () => {
+    const Modal = (props) => {
         return (
-            <ModalComponent isVisible={isVisible} callbackClose={closeModal} />
+            <ModalComponent isVisible={isVisible} callbackClose={closeModal} {...props} />
         );
     };
 

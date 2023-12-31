@@ -1,16 +1,18 @@
 import Button from "../../Button";
 import Modal from "../Modal";
 
+import { deleteNotepad } from "../../../services/crudNotepad.js"
+
 const ModalDelete = ({
     callbackClose,
     isVisible,
     notepadId,
-    callbackSuccess,
     callbackAction,
+    callbackSuccess,
 }) => {
     const onClickDelete = async () => {
         try {
-            await callbackAction(notepadId);
+            await callbackAction({ id: notepadId });
             callbackSuccess();
             callbackClose();
         } catch (error) {
@@ -18,7 +20,7 @@ const ModalDelete = ({
         }
     };
 
-    const callbackForm = (a, event) => {
+    const callbackForm = (event) => {
         event.preventDefault();
         const buttonPress = event.nativeEvent.submitter;
         const buttonSend = buttonPress.getAttribute("send");

@@ -39,12 +39,17 @@ const Main = () => {
         return notepad;
     };
 
-    useEffect(() => {
-        const main = async () => {
+    const updateNotepadsInList = async () => {
+        try {
             const list = await getAllNotepads();
             setListNotepads(list);
-        };
-        main();
+        } catch(e) {
+            console.error(e)
+        }
+    };
+
+    useEffect(() => {
+        updateNotepadsInList()
     }, []);
 
     return (
@@ -96,17 +101,17 @@ const Main = () => {
                 </section>
             </main>
             <ModalFormCreate
-                callbackSuccess={setListNotepads}
+                callbackSuccess={updateNotepadsInList}
                 callbackGetNotepad={getNotepadInList}
                 callbackAction={createNotepad}
             />
             <ModalFormEdit
-                callbackSuccess={setListNotepads}
+                callbackSuccess={updateNotepadsInList}
                 callbackAction={editNotepad}
                 notepad={getNotepadInList(notepadId)}
             />
             <ModalDelete
-                callbackSuccess={setListNotepads}
+                callbackSuccess={updateNotepadsInList}
                 callbackAction={deleteNotepad}
                 notepadId={notepadId}
             />

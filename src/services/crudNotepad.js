@@ -43,5 +43,5 @@ export const deleteNotepad = async ({ id }) => {
 
     if (response.status !== 403) throw new Error(content.message);
 
-    return await content;
+    return await response;
 };
