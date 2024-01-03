@@ -17,7 +17,7 @@ export const createNotepad = async ({ title, content }) => {
     const response = await api.post(endpoint, data);
     const resContent = await response.data;
 
-    if (response.statusText !== "OK") throw new Error(resContent.message);
+    if (response.status !== 201) throw new Error(resContent.message);
 
     return await resContent;
 };
@@ -25,7 +25,12 @@ export const createNotepad = async ({ title, content }) => {
 export const editNotepad = async ({ id, title, content }) => {
     const data = { title, content };
 
-    const response = await api.patch(`${endpoint}/${id}`, data);
+    const response = await api.patch(`${endpoint}/${id}`, {
+        validateStatus: function (status) {
+            return status === 201 || status === 203;
+        },
+        data,
+    });
     const resContent = await response.data;
 
     console.log(response);
@@ -36,12 +41,8 @@ export const editNotepad = async ({ id, title, content }) => {
 };
 
 export const deleteNotepad = async ({ id }) => {
-    const response = await api.delete(`${endpoint}/${id}`);
-    const content = await response.data;
-
-    console.log(response);
-
-    if (response.status !== 403) throw new Error(content.message);
-
+    const response = await api.delete(`${endpoint}/${id}`, {
+        validateStatus: (status) => status === 204,
+    });
     return await response;
 };

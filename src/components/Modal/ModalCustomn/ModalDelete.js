@@ -1,8 +1,6 @@
 import Button from "../../Button";
 import Modal from "../Modal";
 
-import { deleteNotepad } from "../../../services/crudNotepad.js"
-
 const ModalDelete = ({
     callbackClose,
     isVisible,

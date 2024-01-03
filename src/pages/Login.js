@@ -10,6 +10,7 @@ import { setAccessToken, setRefreshToken } from "../services/cookiesHandle.js";
 
 import ModalServerError from "../components/Modal/ModalCustomn/ModalServerError.js";
 import { useModal } from "../components/Modal/useModal.js";
+import { useNavigate } from "react-router-dom";
 
 const schema = yup.object({
     email: yup
@@ -27,6 +28,7 @@ const Login = () => {
         setError,
     } = useForm({ resolver: yupResolver(schema) });
 
+    const navigate = useNavigate()
     const { Modal, openModal } = useModal({ modal: ModalServerError });
 
     const callbackLogin = async (fields) => {
@@ -36,7 +38,7 @@ const Login = () => {
             if (response.access) {
                 setAccessToken(response.access);
                 setRefreshToken(response.refresh);
-                window.location.reload();
+                navigate("/main");
             }
         } catch (error) {
             if (error.message === "Network Error") {
