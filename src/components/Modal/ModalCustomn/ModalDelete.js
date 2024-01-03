@@ -1,8 +1,6 @@
 import Button from "../../Button";
 import Modal from "../Modal";
 
-import { deleteNotepad } from "../../../services/crudNotepad.js"
-
 const ModalDelete = ({
     callbackClose,
     isVisible,
@@ -37,7 +35,7 @@ const ModalDelete = ({
                 <h1 className="text-xl">Deseja mesmo excluir essa anotação?</h1>
                 <div className="flex gap-4">
                     <Button isOutline={true}>Cancelar</Button>
-                    <Button hasSend>Excluir</Button>
+                    <Button hasSend data-cy="modal-action">Excluir</Button>
                 </div>
             </form>
         </Modal>
