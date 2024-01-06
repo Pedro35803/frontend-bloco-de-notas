@@ -8,8 +8,6 @@ import Button from "../components/Button.js";
 import { login } from "../services/crudUser.js";
 import { setAccessToken, setRefreshToken } from "../services/cookiesHandle.js";
 
-import ModalServerError from "../components/Modal/ModalCustomn/ModalServerError.js";
-import { useModal } from "../components/Modal/useModal.js";
 import { useNavigate } from "react-router-dom";
 
 const schema = yup.object({
@@ -28,8 +26,7 @@ const Login = () => {
         setError,
     } = useForm({ resolver: yupResolver(schema) });
 
-    const navigate = useNavigate()
-    const { Modal, openModal } = useModal({ modal: ModalServerError });
+    const navigate = useNavigate();
 
     const callbackLogin = async (fields) => {
         try {
@@ -41,9 +38,7 @@ const Login = () => {
                 navigate("/main");
             }
         } catch (error) {
-            if (error.message === "Network Error") {
-                openModal();
-            } else if (error.name === "AxiosError") {
+            if (error.name === "AxiosError") {
                 const { status } = error.response;
                 if (status === 401) {
                     const config = {
@@ -58,48 +53,45 @@ const Login = () => {
     };
 
     return (
-        <>
-            <main className="h-screen elem-center">
-                <div className="space-y-9 max-w-[40rem] w-full">
-                    <h1 className="title">Login</h1>
-                    <form
-                        noValidate
-                        className="form"
-                        onSubmit={handleSubmit(callbackLogin)}
-                    >
-                        <Input
-                            max="125"
-                            type="email"
-                            label="E-mail"
-                            data-cy="login-email"
-                            error={errors.email}
-                            {...register("email")}
-                        />
+        <main className="h-screen elem-center">
+            <div className="space-y-9 max-w-[40rem] w-full">
+                <h1 className="title">Login</h1>
+                <form
+                    noValidate
+                    className="form"
+                    onSubmit={handleSubmit(callbackLogin)}
+                >
+                    <Input
+                        max="125"
+                        type="email"
+                        label="E-mail"
+                        data-cy="login-email"
+                        error={errors.email}
+                        {...register("email")}
+                    />
 
-                        <Input
-                            max="125"
-                            label="Senha"
-                            type="password"
-                            data-cy="login-password"
-                            error={errors.password}
-                            {...register("password")}
-                        />
+                    <Input
+                        max="125"
+                        label="Senha"
+                        type="password"
+                        data-cy="login-password"
+                        error={errors.password}
+                        {...register("password")}
+                    />
 
-                        <div className="flex justify-content gap-4">
-                            <Button
-                                isOutline={true}
-                                link="/register"
-                                data-cy="login-redirect_register"
-                            >
-                                Cadastro
-                            </Button>
-                            <Button data-cy="login-save">Entrar</Button>
-                        </div>
-                    </form>
-                </div>
-            </main>
-            <Modal />
-        </>
+                    <div className="flex justify-content gap-4">
+                        <Button
+                            isOutline={true}
+                            link="/register"
+                            data-cy="login-redirect_register"
+                        >
+                            Cadastro
+                        </Button>
+                        <Button data-cy="login-save">Entrar</Button>
+                    </div>
+                </form>
+            </div>
+        </main>
     );
 };
 
