@@ -14,13 +14,16 @@
     "react-hook-form": "^7.46.1",
     "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4",
     "yup": "^1.2.0"
+  },
+  "devDependecies": {
+    "web-vitals": "^2.1.4",
+    "@cypress/instrument-cra": "^1.4.0",
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "dev": "react-scripts -r @cypress/instrument-cra start",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

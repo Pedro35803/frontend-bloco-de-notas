@@ -48,8 +48,10 @@ const Router = () => {
             setAccessToken(token);
         };
 
-        const access = getAccessToken();
-        access ? updateToken(access) : refreshAccess(access);
+        if (refresh) {
+            const access = getAccessToken();
+            access ? updateToken(access) : refreshAccess(access);
+        }
     }, []);
 
     return <RouterProvider router={refresh ? privateRoutes : publicRoutes} />;
