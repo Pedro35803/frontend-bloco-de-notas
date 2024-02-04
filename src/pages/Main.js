@@ -14,6 +14,7 @@ import {
 import { useModal } from "../components/Modal/useModal.js";
 import ModalFormComponent from "../components/Modal/ModalCustomn/ModalForm.js";
 import ModalDeleteComponent from "../components/Modal/ModalCustomn/ModalDelete.js";
+import Logout from "../components/Logout.js";
 
 const Main = () => {
     const [listNotepads, setListNotepads] = useState([]);
@@ -88,7 +89,7 @@ const Main = () => {
                     </button>
                 </section>
 
-                <section className="container flex flex-col justify-between items-center gap-8">
+                <section className="container flex flex-1 flex-col justify-between items-center gap-8">
                     {listNotepads.map((notepadObj, index) => (
                         <Notepad
                             key={index}
@@ -99,6 +100,8 @@ const Main = () => {
                         />
                     ))}
                 </section>
+
+                <Logout />
             </main>
             <ModalFormCreate
                 callbackSuccess={updateNotepadsInList}

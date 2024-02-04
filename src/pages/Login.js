@@ -35,7 +35,7 @@ const Login = () => {
             if (response.access) {
                 setAccessToken(response.access);
                 setRefreshToken(response.refresh);
-                navigate("/main");
+                window.location.reload()
             }
         } catch (error) {
             if (error.name === "AxiosError") {

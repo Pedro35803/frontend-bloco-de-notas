@@ -4,20 +4,21 @@ export const timeToken = (minutesToken) => {
     const milisecondsInSeconds = 1000;
     const secondsInMinute = 60;
 
-    const secondsInMinutes = minutesToken * secondsInMinute * milisecondsInSeconds;
+    const secondsInMinutes =
+        minutesToken * secondsInMinute * milisecondsInSeconds;
     const dateFuture = Date.now() + secondsInMinutes;
     const dateObj = new Date(dateFuture);
 
     return dateObj;
-}
+};
 
 export const getAccessToken = () => {
     return cookie.get("access");
-}
+};
 
 export const getRefreshToken = () => {
     return cookie.get("refresh");
-}
+};
 
 export const setAccessToken = (newToken) => {
     const minutesAccessToken = Number(
@@ -29,7 +30,7 @@ export const setAccessToken = (newToken) => {
     cookie.set("access", newToken, {
         expires: timeTokenAccess,
     });
-}
+};
 
 export const setRefreshToken = (newToken) => {
     const minutesRefreshToken = Number(
@@ -41,4 +42,9 @@ export const setRefreshToken = (newToken) => {
     cookie.set("refresh", newToken, {
         expires: timeTokenRefresh,
     });
-}
+};
+
+export const clearCokkies = () => {
+    cookie.remove("access");
+    cookie.remove("refresh");
+};

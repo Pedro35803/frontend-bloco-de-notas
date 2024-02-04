@@ -30,6 +30,10 @@ const publicRoutes = createBrowserRouter([
         path: "/register",
         element: <Register />,
     },
+    {
+        path: "/*",
+        element: <Navigate to="/login" />,
+    },
 ]);
 
 const privateRoutes = createBrowserRouter([
@@ -37,10 +41,15 @@ const privateRoutes = createBrowserRouter([
         path: "/",
         element: <Main />,
     },
+    {
+        path: "/*",
+        element: <Navigate to="/" />,
+    },
 ]);
 
 const Router = () => {
     const refresh = getRefreshToken();
+    console.log(refresh)
 
     useEffect(() => {
         const refreshAccess = async () => {
