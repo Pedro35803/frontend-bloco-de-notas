@@ -8,8 +8,6 @@ import Button from "../components/Button.js";
 import { login } from "../services/crudUser.js";
 import { setAccessToken, setRefreshToken } from "../services/cookiesHandle.js";
 
-import { useNavigate } from "react-router-dom";
-
 const schema = yup.object({
     email: yup
         .string()
@@ -25,8 +23,6 @@ const Login = () => {
         formState: { errors },
         setError,
     } = useForm({ resolver: yupResolver(schema) });
-
-    const navigate = useNavigate();
 
     const callbackLogin = async (fields) => {
         try {

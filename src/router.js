@@ -49,7 +49,6 @@ const privateRoutes = createBrowserRouter([
 
 const Router = () => {
     const refresh = getRefreshToken();
-    console.log(refresh)
 
     useEffect(() => {
         const refreshAccess = async () => {
