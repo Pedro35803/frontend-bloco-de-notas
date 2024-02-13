@@ -24,9 +24,11 @@ const Main = () => {
         modal: ModalDeleteComponent,
     });
 
-    const { Modal: ModalFormCreate, openModal: openModalFormCreate } = useModal({
-        modal: ModalFormComponent,
-    });
+    const { Modal: ModalFormCreate, openModal: openModalFormCreate } = useModal(
+        {
+            modal: ModalFormComponent,
+        }
+    );
 
     const { Modal: ModalFormEdit, openModal: openModalFormEdit } = useModal({
         modal: ModalFormComponent,
@@ -43,14 +45,23 @@ const Main = () => {
     const updateNotepadsInList = async () => {
         try {
             const list = await getAllNotepads();
-            setListNotepads(list);
-        } catch(e) {
-            console.error(e)
+            setListNotepads(list.map((obj) => ({ ...obj, isVisible: true })));
+        } catch (e) {
+            console.error(e);
         }
     };
 
+    const searchElements = async (e) => {
+        const text = e.target.value;
+        const list = listNotepads.map((obj) => {
+            const isInclude = obj.title.includes(text);
+            return { ...obj, isVisible: isInclude };
+        });
+        setListNotepads(list);
+    };
+
     useEffect(() => {
-        updateNotepadsInList()
+        updateNotepadsInList();
     }, []);
 
     return (
@@ -71,8 +82,10 @@ const Main = () => {
                         <input
                             type="text"
                             id="input-search"
+                            data-cy="search-notepad"
                             placeholder="Pesquisar nota"
                             className="bg-primary outline-0 pl-2 placeholder:text-secondary"
+                            onChange={searchElements}
                         />
                     </label>
 
@@ -89,16 +102,22 @@ const Main = () => {
                     </button>
                 </section>
 
-                <section className="container flex flex-1 flex-col justify-between items-center gap-8">
-                    {listNotepads.map((notepadObj, index) => (
-                        <Notepad
-                            key={index}
-                            data={notepadObj}
-                            callbackModalEdit={openModalFormEdit}
-                            callbackModalDelete={openModalDelete}
-                            updateId={setNotepadId}
-                        />
-                    ))}
+                <section
+                    data-cy="section-notepads"
+                    className="container flex flex-1 flex-col justify-between items-center gap-8"
+                >
+                    {listNotepads.map(
+                        (notepadObj, index) =>
+                            notepadObj.isVisible && (
+                                <Notepad
+                                    key={index}
+                                    data={notepadObj}
+                                    callbackModalEdit={openModalFormEdit}
+                                    callbackModalDelete={openModalDelete}
+                                    updateId={setNotepadId}
+                                />
+                            )
+                    )}
                 </section>
 
                 <Logout />
