@@ -8,14 +8,8 @@ import Main from "./pages/Main.js";
 import Login from "./pages/Login.js";
 import Register from "./pages/Register.js";
 
-import { refreshToken } from "./services/refreshToken.js";
-import {
-    getAccessToken,
-    getRefreshToken,
-    setAccessToken,
-} from "./services/cookiesHandle.js";
-import React, { useEffect } from "react";
-import { updateToken } from "./api.js";
+import { getRefreshToken } from "./services/cookiesHandle.js";
+import React from "react";
 
 const publicRoutes = createBrowserRouter([
     {
@@ -49,19 +43,6 @@ const privateRoutes = createBrowserRouter([
 
 const Router = () => {
     const refresh = getRefreshToken();
-
-    useEffect(() => {
-        const refreshAccess = async () => {
-            const token = await refreshToken();
-            setAccessToken(token);
-        };
-
-        if (refresh) {
-            const access = getAccessToken();
-            access ? updateToken(access) : refreshAccess(access);
-        }
-    }, []);
-
     return <RouterProvider router={refresh ? privateRoutes : publicRoutes} />;
 };
 
